@@ -6,6 +6,11 @@ services:
     expose:
       - 8080
 
+  db:
+    image: postgres:14.2-alpine
+    expose:
+      - 5432
+
   nginx:
     image: akaka4ka/osmc-front-end:latest
     depends_on:
