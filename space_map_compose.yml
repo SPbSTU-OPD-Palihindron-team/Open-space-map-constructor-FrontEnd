@@ -1,15 +1,17 @@
 version: '3.9'
 
 services:
-  quarkus:
-    image: akaka4ka/osmc-back-end:latest
-    expose:
-      - 8080
-
   db:
     image: postgres:14.2-alpine
     expose:
       - 5432
+
+  quarkus:
+    image: akaka4ka/osmc-back-end:latest
+    depends_on:
+      - db
+    expose:
+      - 8080
 
   nginx:
     image: akaka4ka/osmc-front-end:latest
