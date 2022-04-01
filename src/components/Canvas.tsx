@@ -5,20 +5,24 @@ import CanvasGrid from "./CanvasGrid";
 
 const Canvas = () => {
     const [stageScale, setStageScale] = useState(1);
-    const [stageX, setStageX] = useState(0);
-    const [stageY, setStageY] = useState(0);
+    const [stageCoords, setStageCoords] = useState({x: 0, y: 0});
 
     /**States for test to show coordinates of mouse*/
     const [curX, setCurX] = useState(0);
     const [curY, setCurY] = useState(0);
 
     /**Function to zoom via mouse wheel */
+    /*TODO: any should be replaced with explicit type */
     const handleWheelZoom =  (e: any) => {
         e.evt.preventDefault();
 
         const scaleBy = 1.05;
         const stage = e.target.getStage();
         const oldScale = stage.scaleX();
+        /**
+         * stage.x() - absolute coordinates of stage
+         * stage.getPointerPosition().x - relative coordinates of mouse
+         * */
         const mousePointTo = {
             x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
             y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale
@@ -29,11 +33,12 @@ const Canvas = () => {
         stage.scale({ x: newScale, y: newScale });
 
         const s = stage.getPointerPosition();
-        const m = mousePointTo;
 
         setStageScale(newScale);
-        setStageX(-(m.x - s.x / newScale) * newScale);
-        setStageY(-(m.y - s.y / newScale) * newScale);
+        setStageCoords({
+            x: -(mousePointTo.x - s.x / newScale) * newScale,
+            y: -(mousePointTo.y - s.y / newScale) * newScale
+        })
     };
 
     /**Test function that shows coordinates of mouse */
@@ -46,7 +51,7 @@ const Canvas = () => {
     return (
         <div>
             {/*Test Text that shows coordinates of mouse */}
-            <Text>{curX}, {curY}, {stageScale}, {curY}</Text>
+            <Text>{curX}, {curY}, {stageScale}</Text>
             <Stage
                 width={window.innerWidth}
                 height={window.innerHeight}
@@ -54,10 +59,16 @@ const Canvas = () => {
                 onWheel={handleWheelZoom}
                 scaleX={stageScale}
                 scaleY={stageScale}
-                x={stageX}
-                y={stageY}
-                onMouseMove={handleMouseMove}>
+                x={stageCoords.x}
+                y={stageCoords.y}
+                onMouseMove={handleMouseMove}
+                /*TODO: any should be replaced with explicit type */
+                onDragEnd={(e: any) => {
+                    setStageCoords(e.currentTarget.position());
+                }}
+            >
                 <Layer>
+                    <CanvasGrid x={stageCoords.x} y={stageCoords.y}/>
                     {/*Test Circle*/}
                     <Circle x={100}
                             y={100}
