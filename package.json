@@ -30,7 +30,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate-openapi-code": "rm -rf src/openapi; openapi -i documents/reference/api.yaml  -o src/openapi"
   },
   "eslintConfig": {
     "extends": [
@@ -49,5 +50,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "openapi-typescript": "^5.2.0",
+    "openapi-typescript-codegen": "^0.21.0"
   }
 }
