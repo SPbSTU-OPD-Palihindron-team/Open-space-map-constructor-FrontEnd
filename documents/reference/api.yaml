@@ -1,0 +1,1142 @@
+openapi: 3.0.3
+info:
+  title: map_rest_api
+  version: '1.0'
+  description: Open space map REST API documentation in Open API format.
+  license:
+    name: MIT
+  contact:
+    name: Evgenii Sudakov
+    email: yevgeniysudakov@gmail.com
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /employees:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - employee
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  employees:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Employee'
+        '400':
+          description: Bad Request
+      operationId: get-employees
+      description: Returns all emploees in the openspace-map system.
+      security:
+        - apiKey: []
+  /employee:
+    parameters: []
+    post:
+      summary: POST endpoint
+      operationId: post-employee
+      responses:
+        '201':
+          description: Created
+        '203':
+          description: Non-Authoritative Information
+        '400':
+          description: Bad Request
+      description: |
+        Registration of new user in open-space-map service.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              x-examples:
+                example-1:
+                  email: string
+                  password: string
+              properties:
+                employee:
+                  $ref: '#/components/schemas/Employee-entity'
+        description: 'Post query with fields: name, surname, email, password to add employee in table Registrated Users. Name, surname, email for validation employee with his data in Employees table, if he is worker, can be add to registrated users in open-space-map service.'
+      tags:
+        - employee
+      security:
+        - apiKey: []
+  '/employee/{employee_id}':
+    get:
+      summary: GET endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  employee:
+                    $ref: '#/components/schemas/Employee'
+        '400':
+          description: Bad Request
+      operationId: get-search-employee
+      description: |-
+        Query for getting full information of the user. It needs when employee wants to know more information about some user. 
+        Returns personal information about user.
+      tags:
+        - employee
+      security:
+        - apiKey: []
+    parameters:
+      - schema:
+          type: string
+        name: employee_id
+        in: path
+        required: true
+    post:
+      summary: POST endpoint
+      operationId: post-employee-employee_id
+      responses:
+        '200':
+          description: OK
+      tags:
+        - employee
+      description: Query for changing fields of employee.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                employee:
+                  $ref: '#/components/schemas/Employee'
+        description: ''
+  /buildings:
+    get:
+      summary: GET endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  buildings:
+                    type: array
+                    description: |
+                      list of addreses buildings
+                    items:
+                      $ref: '#/components/schemas/Building'
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-builds
+      description: Returning list of registered in system buildings.
+      tags:
+        - building
+      security:
+        - apiKey: []
+    parameters: []
+  '/building/{building_id}/floors':
+    get:
+      summary: GET endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    floors: 'array[integer]'
+                properties:
+                  floors:
+                    type: array
+                    uniqueItems: true
+                    description: |
+                      list of number of floors
+                    items:
+                      $ref: '#/components/schemas/Floor'
+                    readOnly: true
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+            multipart/form-data:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-building-floors-list
+      description: |-
+        GET query to show floors of the chosen buiding. 
+        It needs for choosing floor from list for special building.
+      tags:
+        - building
+      parameters: []
+      security:
+        - apiKey: []
+    parameters:
+      - schema:
+          type: integer
+        name: building_id
+        in: path
+        description: id of the building
+        required: true
+  '/building/{building_id}/floor':
+    post:
+      summary: POST endpoint
+      operationId: post-building-add
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                floor:
+                  type: integer
+                  description: number of new floor
+      description: 'Query for adding new floor in building for admin, when creating map.'
+      tags:
+        - floor
+      security:
+        - apiKey: []
+    parameters:
+      - schema:
+          type: integer
+        name: building_id
+        in: path
+        required: true
+        description: id of the building
+  /building:
+    parameters: []
+    post:
+      summary: POST endpoint.
+      operationId: post-building
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  $ref: '#/components/schemas/Building-entity'
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+        description: ''
+      description: 'request to add the building for admin, when creating map'
+      tags:
+        - building
+      security:
+        - apiKey: []
+  '/floor/{floor_id}/zones':
+    get:
+      summary: GET endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  zones:
+                    type: array
+                    description: list of zones in definite floor and building
+                    items:
+                      $ref: ''
+        '400':
+          description: Bad Request
+      operationId: get-building-floor-zones
+      description: Returns information of zones located on the chosen floor.
+      tags:
+        - zone
+      security:
+        - apiKey: []
+    parameters:
+      - schema:
+          type: integer
+        name: floor_id
+        in: path
+        required: true
+  '/floor/{floor_id}/walls':
+    parameters:
+      - schema:
+          type: integer
+        name: floor_id
+        in: path
+        required: true
+    get:
+      summary: GET endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  walls:
+                    type: array
+                    description: list of walls in defenition floor and building
+                    items:
+                      $ref: '#/components/schemas/Wall'
+          headers: {}
+        '400':
+          description: Bad Request
+      operationId: get-building-floor_number-walls
+      description: Returns walls appropriate to the floor of the building. It shows at map.
+      tags:
+        - wall
+      security:
+        - apiKey: []
+  '/floor/{floor_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: floor_id
+        in: path
+        required: true
+    delete:
+      summary: DELETE endpoint.
+      operationId: delete-floor-building_id-delete
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+      description: 'Query for deleting floor according to the building by id for admin, it shows at map.'
+      tags:
+        - floor
+      security:
+        - apiKey: []
+  /item_types:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - item
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  itemTypes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ItemType'
+        '400':
+          description: Bad Request
+      operationId: get-item_types
+      security:
+        - apiKey: []
+      description: Returns all availible items to place on map.
+  '/item/{item_id}':
+    parameters:
+      - schema:
+          type: integer
+        name: item_id
+        in: path
+        required: true
+        description: id of the item
+    get:
+      summary: GET endpoint
+      tags:
+        - item
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                description: list of possible items in basa
+                properties:
+                  item:
+                    $ref: '#/components/schemas/WorkspaceItem'
+                  ItemType:
+                    type: string
+                required:
+                  - item
+                  - ItemType
+        '400':
+          description: Bad Request
+      operationId: get-items-item_id
+      description: Returns item by its id.
+      security:
+        - apiKey: []
+    delete:
+      summary: DELETE endpoint
+      operationId: delete-items-item_id
+      responses:
+        '200':
+          description: OK
+      description: 'Query for deleting an item for admin, it shows at map.'
+      tags:
+        - item
+      security:
+        - apiKey: []
+  /items:
+    post:
+      summary: POST endpoint.
+      operationId: post-items-save
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+      description: Saving buffered items after editing finish.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                itemList:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Item'
+        description: ''
+      tags:
+        - item
+      security:
+        - apiKey: []
+    parameters: []
+  '/schedule/zone/{zone_id}/employees':
+    get:
+      summary: GET endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                description: list of empolyees in definition zone
+                properties:
+                  empoyees:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Employee'
+        '400':
+          description: Bad Request
+      operationId: get-zones-employees-check
+      description: 'Query for getting list of employees according to the zone by its id at the current time. '
+      tags:
+        - zone
+      security:
+        - apiKey: []
+    parameters:
+      - schema:
+          type: integer
+        name: zone_id
+        in: path
+        required: true
+  '/wall/{wall_id}':
+    put:
+      summary: PUT endpoint
+      operationId: put-walls-wall_id-edit
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+      description: Edit walls for admin.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: list of possible walls in basa
+              properties:
+                wall:
+                  $ref: '#/components/schemas/Wall'
+        description: Edited information.
+      tags:
+        - wall
+      security:
+        - apiKey: []
+    parameters:
+      - schema:
+          type: integer
+        name: wall_id
+        in: path
+        required: true
+    delete:
+      summary: DELETE endpoint
+      operationId: delete-wall-wall_id
+      responses:
+        '200':
+          description: OK
+      description: 'Query for deleting a wall for admin, it shows at map.'
+      tags:
+        - wall
+      security:
+        - apiKey: []
+  /walls:
+    post:
+      summary: POST endpoint
+      operationId: post-walls-save
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Zone'
+        '400':
+          description: Bad Request
+      description: Save walls.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                wallsList:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Wall-entity'
+      tags:
+        - wall
+      security:
+        - apiKey: []
+    parameters: []
+  '/zone/{zone_id}/items':
+    parameters:
+      - schema:
+          type: integer
+        name: zone_id
+        in: path
+        required: true
+        description: id of the zone
+    get:
+      summary: GET endpoint
+      tags:
+        - zone
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                description: list of item in definition zone
+                properties:
+                  itemList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        item:
+                          $ref: '#/components/schemas/Item'
+        '400':
+          description: Bad Request
+      operationId: get-zone-zone_id-items
+      description: Returns items in zone.
+      security:
+        - apiKey: []
+  /zones:
+    post:
+      summary: POST endpoint.
+      operationId: post-zones-save
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+      description: Save zones.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                zoneList:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Zone'
+        description: ''
+      tags:
+        - zone
+      security:
+        - apiKey: []
+    parameters: []
+  '/map/item_search/{itemName}':
+    parameters:
+      - schema:
+          type: string
+        name: itemName
+        in: path
+        required: true
+        description: name of the item
+    get:
+      summary: GET endpoint
+      tags:
+        - item
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                description: list of items in definition floor and zone
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Item'
+        '400':
+          description: Bad Request
+      operationId: get-items-itemType
+      description: Query for getting items by its names with number of zone. It needs to everyone can see list of item in zone.
+      security:
+        - apiKey: []
+  '/registered_user/is_admin/{user_id}':
+    get:
+      summary: GET endpoint
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  privelege:
+                    type: boolean
+                    description: 'admin - 1, user - 0'
+            application/xml:
+              schema:
+                type: object
+                properties: {}
+        '400':
+          description: Bad Request
+      operationId: get-user
+      tags:
+        - user
+      description: Request which check status of person (admin or not)
+      security:
+        - apiKey: []
+    parameters:
+      - schema:
+          type: integer
+        name: user_id
+        in: path
+        description: id of the user
+        required: true
+    put:
+      summary: PUT endpoint
+      operationId: put-registrated_user-user_id
+      responses:
+        '200':
+          description: OK
+      description: 'Query for editing employee''s information. User can change only password. '
+      tags:
+        - user
+      security:
+        - apiKey: []
+  '/map/employee_placement/{employee_id}':
+    get:
+      summary: ''
+      operationId: get-map-employee_placement-employee_id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  item:
+                    $ref: '#/components/schemas/WorkspaceItem'
+                  building:
+                    $ref: '#/components/schemas/Building'
+                  floor:
+                    $ref: '#/components/schemas/Floor'
+      description: Searching employee placement.
+      tags:
+        - employee
+    parameters:
+      - schema:
+          type: integer
+        name: employee_id
+        in: path
+        required: true
+        description: id of employee
+  /workspace:
+    post:
+      summary: ''
+      operationId: post-workspace
+      responses:
+        '200':
+          description: OK
+      description: Adding new workspace item.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                WorkspaceItem:
+                  $ref: '#/components/schemas/Item-entity'
+      tags:
+        - item
+components:
+  schemas:
+    Zone:
+      title: Zone
+      type: object
+      properties:
+        zone_id:
+          type: integer
+        building_id:
+          type: integer
+        floor_id:
+          type: integer
+        form:
+          type: array
+          items:
+            type: object
+            properties:
+              point:
+                type: object
+                required:
+                  - x
+                  - y
+                properties:
+                  x:
+                    type: integer
+                  y:
+                    type: integer
+            required:
+              - point
+        numberZone:
+          type: integer
+          description: Number of cabinet if it is.
+        type:
+          type: string
+          description: 'Enum of zone type: CABINET or OPEN_AREA '
+        description:
+          type: string
+      required:
+        - zone_id
+        - building_id
+        - floor_id
+        - form
+    Employee:
+      title: Employee
+      type: object
+      properties:
+        employee_id:
+          type: integer
+        name:
+          type: string
+        surname:
+          type: string
+        patronymic:
+          type: string
+        email:
+          type: string
+          format: email
+        telephone:
+          type: string
+        specialization:
+          type: string
+      required:
+        - employee_id
+        - name
+        - surname
+        - email
+    Employee-entity:
+      title: Employee
+      type: object
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        patronymic:
+          type: string
+        email:
+          type: string
+          format: email
+        telephone:
+          type: string
+        specialization:
+          type: string
+      required:
+        - name
+        - surname
+        - email
+    Schedule:
+      title: Schedule
+      type: object
+      properties:
+        sesion_id:
+          type: integer
+        employee_id:
+          type: array
+          items:
+            type: integer
+        zone_id:
+          type: integer
+        startTime:
+          format: date-time
+          type: string
+        endTime:
+          type: string
+          format: duration
+        description:
+          type: string
+          description: Admins addictional information for users.
+      required:
+        - sesion_id
+        - employee_id
+        - zone_id
+    Building:
+      title: Building
+      type: object
+      x-examples:
+        - pk_building_id: 0
+          address: string
+          numberFloors: string
+      properties:
+        building_id:
+          type: integer
+        address:
+          type: string
+        numberFloors:
+          type: integer
+          description: Maximum floor number in the building.
+      required:
+        - building_id
+        - address
+        - numberFloors
+    Building-entity:
+      title: Building
+      type: object
+      x-examples:
+        - pk_building_id: 0
+          address: string
+          numberFloors: string
+      properties:
+        address:
+          type: string
+        numberFloors:
+          type: integer
+          description: Maximum floor number in the building.
+      required:
+        - address
+        - numberFloors
+    Wall:
+      title: Wall
+      type: object
+      properties:
+        wall_id:
+          type: integer
+        floor_id:
+          type: integer
+        color:
+          type: string
+        form:
+          type: array
+          items:
+            type: object
+            properties:
+              point:
+                type: object
+                required:
+                  - x
+                  - y
+                properties:
+                  x:
+                    type: integer
+                  y:
+                    type: integer
+            required:
+              - point
+        wallType:
+          type: string
+      required:
+        - wall_id
+        - floor_id
+        - form
+    Wall-entity:
+      title: Wall
+      type: object
+      properties:
+        floor_id:
+          type: integer
+        color:
+          type: string
+        form:
+          type: array
+          items:
+            type: object
+            properties:
+              point:
+                type: object
+                required:
+                  - x
+                  - y
+                properties:
+                  x:
+                    type: integer
+                  y:
+                    type: integer
+            required:
+              - point
+        wallType:
+          type: string
+      required:
+        - floor_id
+        - form
+    Item:
+      title: Item
+      type: object
+      x-examples:
+        - pk_item_id: 0
+          fk_zone_id: 0
+          fk_itemType_id: 0
+          point:
+            x1: 0
+            y1: 0
+            x2: 0
+            y2: 0
+          angle: 0
+      description: ''
+      properties:
+        item_id:
+          type: integer
+        floor_id:
+          type: integer
+        point:
+          type: object
+          required:
+            - x
+            - y
+          properties:
+            x:
+              type: integer
+            y:
+              type: integer
+        angle:
+          type: number
+          format: float
+        itemType:
+          $ref: '#/components/schemas/ItemType'
+      required:
+        - item_id
+        - floor_id
+        - point
+        - angle
+        - itemType
+    Item-entity:
+      title: Item-entity
+      type: object
+      x-examples:
+        - pk_item_id: 0
+          fk_zone_id: 0
+          fk_itemType_id: 0
+          point:
+            x1: 0
+            y1: 0
+            x2: 0
+            y2: 0
+          angle: 0
+      description: ''
+      properties:
+        zone_id:
+          type: integer
+        itemType_id:
+          type: integer
+        point:
+          type: object
+          required:
+            - x
+            - y
+          properties:
+            x:
+              type: integer
+            y:
+              type: integer
+        angle:
+          type: number
+          format: float
+      required:
+        - zone_id
+        - itemType_id
+        - point
+        - angle
+    WorkspaceItem:
+      title: WorkspaceItem
+      type: object
+      x-examples:
+        - pk_item_id: 0
+          fk_zone_id: 0
+          fk_itemType_id: 0
+          point:
+            x1: 0
+            y1: 0
+            x2: 0
+            y2: 0
+          angle: 0
+      description: Item with places for employees.
+      properties:
+        item_id:
+          type: integer
+        floor_id:
+          type: integer
+        point:
+          type: object
+          required:
+            - x
+            - y
+          properties:
+            x:
+              type: integer
+            y:
+              type: integer
+        angle:
+          type: number
+          format: float
+        itemType:
+          $ref: '#/components/schemas/ItemType'
+        emploeyes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Employee'
+      required:
+        - item_id
+        - floor_id
+        - point
+        - angle
+        - itemType
+    ItemType:
+      title: ItemType
+      type: object
+      description: ''
+      properties:
+        itemType_id:
+          type: integer
+        itemName:
+          type: string
+          description: 'Enum of: - MFP - ATM - VENDING - COFFE_MACHINE - FIRE_HYDRANT - WORKPLACE - CONFERENCE_TABLE - DINING_ROOM_TABLE - CAFE_TABLE - GYM_SPOT - MEETING_ROOM - DOOR - WINDOW - LED_PANEL'
+        valuablePlacement:
+          type: string
+          description: 'Enum of: - ON_FLOOR - ON_ITEM - ON_WALL - IN_WALL'
+        polygon:
+          type: object
+          required:
+            - point
+          properties:
+            point:
+              type: object
+              required:
+                - x
+                - y
+              properties:
+                x:
+                  type: integer
+                y:
+                  type: integer
+        pictureLink:
+          format: uri-reference
+          type: string
+        description:
+          type: string
+      required:
+        - itemType_id
+        - itemName
+        - valuablePlacement
+        - polygon
+    RegisteredUser:
+      title: RegisteredUser
+      type: object
+      description: ''
+      properties:
+        user_id:
+          type: integer
+        login:
+          type: string
+          description: |
+            login is an email of user
+        password:
+          type: string
+          format: password
+        accessebilityType:
+          type: string
+          description: 'Enum of: - ADMIN - USER'
+      required:
+        - user_id
+        - login
+        - password
+    Floor:
+      title: Floor
+      type: object
+      description: ''
+      properties:
+        floor_id:
+          type: integer
+        building_id:
+          type: integer
+        numberFloor:
+          type: integer
+        floorType:
+          type: string
+          description: 'Enum of: - TECHNICAL - OFFICE'
+      required:
+        - floor_id
+        - building_id
+        - numberFloor
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+tags:
+  - name: zone
+    description: Zone is an area bounded by a closed loop
+  - name: employee
+    description: Employee is a person with information about him.
+  - name: building
+    description: Building is an office described by its address.
+  - name: user
+    description: User is an employee that is registrated in open-space-map service
+  - name: item
+    description: Item an is object that is used to describe map.
+  - name: wall
+    description: Wall is a an object that is used to create rooms and zones.
+  - name: floor
+    description: Floor is a field of building that is used to describe location of zones.
