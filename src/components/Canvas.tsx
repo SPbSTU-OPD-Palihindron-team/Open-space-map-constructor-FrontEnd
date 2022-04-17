@@ -1,12 +1,10 @@
 import React, {useState} from 'react';
-import {Circle, Layer, Rect, Stage, Text} from "react-konva";
-import Konva from "konva";
+import {Circle, Layer, Stage, Text} from "react-konva";
 import CanvasGrid from "./CanvasGrid";
+import {observer} from "mobx-react-lite";
+import CanvasStore from "../stores/CanvasStore";
 
-const Canvas = () => {
-    const [stageScale, setStageScale] = useState(1);
-    const [stageCoords, setStageCoords] = useState({x: 0, y: 0});
-
+const Canvas = observer(() => {
     /**States for test to show coordinates of mouse*/
     const [curX, setCurX] = useState(0);
     const [curY, setCurY] = useState(0);
@@ -29,16 +27,14 @@ const Canvas = () => {
         };
 
         const newScale = e.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
-
         stage.scale({ x: newScale, y: newScale });
-
         const s = stage.getPointerPosition();
 
-        setStageScale(newScale);
-        setStageCoords({
+        CanvasStore.canvasScale = newScale;
+        CanvasStore.canvasPosition = {
             x: -(mousePointTo.x - s.x / newScale) * newScale,
             y: -(mousePointTo.y - s.y / newScale) * newScale
-        })
+        }
     };
 
     /**Test function that shows coordinates of mouse */
@@ -51,34 +47,36 @@ const Canvas = () => {
     return (
         <div>
             {/*Test Text that shows coordinates of mouse */}
-            <Text>{curX}, {curY}, {stageScale}</Text>
+            <Text>{curX}, {curY}, {CanvasStore.canvasScale}</Text>
             <Stage
                 width={window.innerWidth}
                 height={window.innerHeight}
                 draggable
                 onWheel={handleWheelZoom}
-                scaleX={stageScale}
-                scaleY={stageScale}
-                x={stageCoords.x}
-                y={stageCoords.y}
+                scaleX={CanvasStore.canvasScale}
+                scaleY={CanvasStore.canvasScale}
+                x={CanvasStore.canvasPosition.x}
+                y={CanvasStore.canvasPosition.y}
                 onMouseMove={handleMouseMove}
                 /*TODO: any should be replaced with explicit type */
                 onDragEnd={(e: any) => {
-                    setStageCoords(e.currentTarget.position());
+                    CanvasStore.canvasPosition = e.currentTarget.position();
                 }}
             >
                 <Layer>
-                    <CanvasGrid x={stageCoords.x} y={stageCoords.y}/>
+                    <CanvasGrid />
                     {/*Test Circle*/}
                     <Circle x={100}
                             y={100}
                             radius={50}
                             fill={'red'}
-                            draggable={true}/>
+                            draggable={true}
+                            key={228}
+                    />
                 </Layer>
             </Stage>
         </div>
     );
-};
+})
 
 export default Canvas;
