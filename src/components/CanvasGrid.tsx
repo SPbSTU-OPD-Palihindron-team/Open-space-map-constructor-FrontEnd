@@ -1,22 +1,20 @@
 import React from 'react';
-import {Group, Layer, Rect, Stage} from "react-konva";
-
+import {Group, Rect} from "react-konva";
+import CanvasStore from "../stores/CanvasStore";
+import {observer} from "mobx-react-lite";
 /**size of grid */
 const WIDTH = 100;
 const HEIGHT = 100;
 const STROKE = 0.1;
-type stagePos = {
-    x: number,
-    y: number
-}
-const CanvasGrid = (props: stagePos) => {
 
+
+const CanvasGrid = observer (() => {
     /*TODO: Here to improve bug when change scale */
-    const startX = Math.floor((-props.x - window.innerWidth) / WIDTH) * WIDTH;
-    const endX = Math.floor((-props.x + window.innerWidth * 2) / WIDTH) * WIDTH;
+    const startX = Math.floor((-CanvasStore.canvasPosition.x - window.innerWidth) / WIDTH) * WIDTH;
+    const endX = Math.floor((-CanvasStore.canvasPosition.x + window.innerWidth * 2) / WIDTH) * WIDTH;
 
-    const startY = Math.floor((-props.y - window.innerHeight) / HEIGHT) * HEIGHT;
-    const endY = Math.floor((-props.y + window.innerHeight * 2) / HEIGHT) * HEIGHT;
+    const startY = Math.floor((-CanvasStore.canvasPosition.y - window.innerHeight) / HEIGHT) * HEIGHT;
+    const endY = Math.floor((-CanvasStore.canvasPosition.y + window.innerHeight * 2) / HEIGHT) * HEIGHT;
 
     const gridComponents = [];
     let i = 0;
@@ -44,6 +42,6 @@ const CanvasGrid = (props: stagePos) => {
             {gridComponents}
         </Group>
     );
-};
+})
 
 export default CanvasGrid;
