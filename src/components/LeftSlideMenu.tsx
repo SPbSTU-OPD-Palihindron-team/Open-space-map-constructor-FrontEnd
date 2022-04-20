@@ -1,9 +1,11 @@
 import React from 'react';
 import {Group, Rect} from "react-konva";
 import CanvasStore from "../stores/CanvasStore";
+import {observer} from "mobx-react-lite";
+import {icons} from "../assets/images/icons/icons";
 
 
-const LeftSlideMenu = () => {
+const LeftSlideMenu = observer (() => {
     return (
         <div
             style={{
@@ -18,17 +20,23 @@ const LeftSlideMenu = () => {
                 zIndex: 100
             }}
         >
-            <img
-                alt="lion"
-                src="https://konvajs.org/assets/lion.png"
-                draggable="true"
-                onDragStart={e =>{
-                    CanvasStore.chosenImage = require("../assets/images/icons/green.png");
-                }}
-            />
+            {
+                Object.entries(icons).map(([name, src]) =>{
+                    return(<img
+                        style={{
+                            maxBlockSize: 50,
+                        }}
+                        alt={name}
+                        src={src}
+                        draggable="true"
+                        onDragStart={e =>{
+                            CanvasStore.chosenImage = name;
+                        }}
+                    />)
+            })}
         </div>
     )
-};
+})
 
 export default LeftSlideMenu;
 
