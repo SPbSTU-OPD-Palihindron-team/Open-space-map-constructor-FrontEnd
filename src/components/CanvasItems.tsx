@@ -4,21 +4,26 @@ import CanvasStore from "../stores/CanvasStore";
 import {icons} from "../assets/images/icons/icons";
 import useImage from "use-image";
 import {observer} from "mobx-react-lite";
-type ImageType = {
-    src: string,
-    x: number,
-    y: number
-    key: number
-}
+import {ItemType} from "../types/ItemType";
+
 const CanvasItems = observer( () => {
-    const URLImage = (image: ImageType) => {
-        const [img] = useImage(image.src);
-        return <Image image={img} x={image.x} y={image.y} draggable={true} key={image.key}/>;
+
+    const URLImage = (item: ItemType) => {
+        const [image] = useImage(item.src);
+        return <Image image={image}
+                      x={item.x}
+                      y={item.y}
+                      draggable={true}
+                      key={item._key}
+                      onDragEnd={(evt) =>
+                          CanvasStore.dragItem(item._key, evt.target.x(),  evt.target.y())
+        }/>;
+
     }
     return (
         <Group>
             {CanvasStore.images.map(image =>{
-                return <URLImage src={icons[image.src]} x={image.x} y={image.y} key={image.key ? image.key : 0}/>;
+                return <URLImage src={icons[image.src]} x={image.x} y={image.y} _key={image._key}/>;
             })}
         </Group>
 

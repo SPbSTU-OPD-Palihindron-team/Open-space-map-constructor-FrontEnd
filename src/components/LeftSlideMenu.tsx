@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Group, Rect} from "react-konva";
 import CanvasStore from "../stores/CanvasStore";
 import {observer} from "mobx-react-lite";
@@ -6,6 +6,7 @@ import {icons} from "../assets/images/icons/icons";
 
 
 const LeftSlideMenu = observer (() => {
+    const [isOpen, setMenuState] = useState<boolean>(true)
     return (
         <div
             style={{
@@ -20,7 +21,16 @@ const LeftSlideMenu = observer (() => {
                 zIndex: 100
             }}
         >
-            {
+            <button
+                name={'Menu'}
+                onClick={() => setMenuState(!isOpen)}
+                style={{
+                    border: "1px solid black",
+                    width: "100px",
+                    height: "40px"
+                }}
+            > {'Меню с предметами'}</button>
+            {isOpen &&
                 Object.entries(icons).map(([name, src]) =>{
                     return(<img
                         style={{
