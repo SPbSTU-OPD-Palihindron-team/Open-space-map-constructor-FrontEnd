@@ -1,0 +1,78 @@
+.menu {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0px;
+    left: 906px;
+    transform: translateX(0);
+}
+
+.menu.active {
+    transform: translateX(25%);
+}
+/*#3D5FA0*/
+/*#83B6F3*/
+/*#4B83C6*/
+
+.menu-content {
+    width: 31%;
+    height: 100%;
+    background-color: #161e40;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0;
+    margin-top: 64px;
+}
+
+.menu-header {
+    padding: 10px;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.menu-btn {
+    width: 52px;
+    height: 100%;
+    margin-top: 0;
+    position: absolute;
+    background-color: #ffffff;
+    left: 0;
+    cursor: pointer;
+}
+
+.arrowBackIcon {
+    margin-top: 235px;
+    margin-left: 10px;
+}
+
+.ArrowForwardIcon {
+    margin-top: 235px;
+    margin-left: 20px;
+}
+
+.nameEmployee {
+    top: 10px;
+    font-size: x-large;
+    color: white;
+}
+
+.informationText {
+    margin-top: 20px;
+    color: white;
+    size: 20px;
+
+}
+
+.avatar {
+    margin-left: 0;
+    margin-top: 10px;
+}
+
+.Search {
+    margin-top: 20px;
+    margin-right: 25px;
+}
+
+
+
