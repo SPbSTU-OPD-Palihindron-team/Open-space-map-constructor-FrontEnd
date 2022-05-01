@@ -1,7 +1,7 @@
 import React from 'react';
 import {Autocomplete, TextField} from "@mui/material";
 import InformationOfEmployees from "./InformationOfEmployees";
-import Employees from "../../stores/Employees";
+import Employees from "../../stores/EmployeesStore";
 import {observer} from "mobx-react-lite";
 import './RightSlideMenu.css'
 
