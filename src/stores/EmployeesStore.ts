@@ -1,7 +1,7 @@
 import {makeAutoObservable} from 'mobx'
 
 
-class Employees{
+class EmployeesStore {
     constructor() {
         makeAutoObservable(this);
     }
@@ -20,6 +20,6 @@ class Employees{
 
 }
 
-export default new Employees();
+export default new EmployeesStore();
 
 

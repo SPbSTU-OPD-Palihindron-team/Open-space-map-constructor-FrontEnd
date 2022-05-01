@@ -29,17 +29,20 @@ const LeftSlideMenu = observer (() => {
                     width: "100px",
                     height: "40px"
                 }}
-            > {'Меню с предметами'}</button>
+            >
+                {'Меню с предметами'}
+            </button>
             {isOpen &&
-                Object.entries(icons).map(([name, src]) =>{
-                    return(<img
+                Object.entries(icons).map(([name, src]) => {
+                    return(
+                        <img
                         style={{
                             maxBlockSize: 50,
                         }}
                         alt={name}
                         src={src}
                         draggable="true"
-                        onDragStart={e =>{
+                        onDragStart={e => {
                             CanvasStore.chosenImage = name;
                         }}
                     />)

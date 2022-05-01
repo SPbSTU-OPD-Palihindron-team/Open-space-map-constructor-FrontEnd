@@ -2,27 +2,27 @@
     position: fixed;
     width: 100vw;
     height: 100vh;
-    top: 0px;
-    left: 906px;
-    transform: translateX(0);
+    top: 0;
+    right: 0;
+    transform: translateX(97.5%) ;
+    transition: 0.5s;
 }
 
 .menu.active {
-    transform: translateX(25%);
+    transform: translateX(75%);
+    transition: 0.5s;
 }
-/*#3D5FA0*/
-/*#83B6F3*/
-/*#4B83C6*/
+
 
 .menu-content {
-    width: 31%;
+    width: 25%;
     height: 100%;
     background-color: #161e40;
     display: flex;
     flex-direction: column;
-    align-items: center;
     margin-bottom: 0;
-    margin-top: 64px;
+    margin-top: 0;
+    margin-left: 50px;
 }
 
 .menu-header {
@@ -32,24 +32,27 @@
 }
 
 .menu-btn {
-    width: 52px;
+    width: 3%;
     height: 100%;
     margin-top: 0;
     position: absolute;
     background-color: #ffffff;
-    left: 0;
+    border: none;
     cursor: pointer;
+    display: flex;
+    justify-items: center;
+    align-items: center;
 }
 
-.arrowBackIcon {
-    margin-top: 235px;
-    margin-left: 10px;
-}
+/*.arrowBackIcon {*/
+/*    margin-top: 235px;*/
+/*    margin-left: 10px;*/
+/*}*/
 
-.ArrowForwardIcon {
-    margin-top: 235px;
-    margin-left: 20px;
-}
+/*.ArrowForwardIcon {*/
+/*    margin-top: 235px;*/
+/*    margin-left: 20px;*/
+/*}*/
 
 .nameEmployee {
     top: 10px;
@@ -71,7 +74,6 @@
 
 .Search {
     margin-top: 20px;
-    margin-right: 25px;
 }
 
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import Employees from "../../stores/Employees";
+import Employees from "../../stores/EmployeesStore";
 import { Avatar } from '@mui/material';
 import {lightBlue} from '@mui/material/colors';
 import './RightSlideMenu.css'
