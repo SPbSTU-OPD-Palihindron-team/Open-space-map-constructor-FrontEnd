@@ -34,7 +34,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate-openapi-code": "rm -rf src/openapi; openapi -i documents/reference/api.yaml  -o src/openapi"
+    "generate-openapi-code": "openapi -i documents/reference/api.yaml  -o src/openapi"
   },
   "eslintConfig": {
     "extends": [
