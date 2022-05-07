@@ -13,10 +13,11 @@ const CanvasItems = observer( () => {
         return <Image image={image}
                       x={item.x}
                       y={item.y}
+                      size={{width: 50, height:50}}
                       draggable={true}
                       key={item._key}
-                      onDragEnd={(evt) =>
-                          CanvasStore.dragItem(item._key, evt.target.x(),  evt.target.y())
+                      onDragEnd={(event) =>
+                          CanvasStore.dragItem(item._key, event.target.x(),  event.target.y())
         }/>;
 
     }

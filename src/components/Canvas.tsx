@@ -8,7 +8,8 @@ import {Grid} from "@mui/material";
 import CanvasItems from "./CanvasItems";
 
 
-const Canvas = observer(() => {
+const Canvas = () => {
+
     /**States for test to show coordinates of mouse*/
     const [curX, setCurX] = useState(0);
     const [curY, setCurY] = useState(0);
@@ -20,27 +21,28 @@ const Canvas = observer(() => {
     const handleWheelZoom =  (e: any) => {
         e.evt.preventDefault();
 
-        const scaleBy = 1.05;
+        const scaleBy = 1.02;
         const stage = e.target.getStage();
         const oldScale = stage.scaleX();
+        const pointer = stage.getPointerPosition();
         /**
          * stage.x() - absolute coordinates of stage
          * stage.getPointerPosition().x - absolute coordinates of mouse
          * */
         const mousePointTo = {
-            x: stage.getPointerPosition().x / oldScale - stage.x() / oldScale,
-            y: stage.getPointerPosition().y / oldScale - stage.y() / oldScale
+            x: (pointer.x  - stage.x()) / oldScale,
+            y: (pointer.y  - stage.y()) / oldScale
         };
 
         const newScale = e.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
         stage.scale({ x: newScale, y: newScale });
-        const s = stage.getPointerPosition();
 
         CanvasStore.canvasScale = newScale;
-        CanvasStore.canvasPosition = {
-            x: -(mousePointTo.x - s.x / newScale) * newScale,
-            y: -(mousePointTo.y - s.y / newScale) * newScale
-        }
+        const newPos = {
+            x: pointer.x - mousePointTo.x * newScale,
+            y: pointer.y - mousePointTo.y * newScale,
+        };
+        stage.position(newPos);
     };
 
     /**Test function that shows coordinates of mouse */
@@ -69,7 +71,7 @@ const Canvas = observer(() => {
                             // @ts-ignore
                             stageRef.current.setPointersPositions(e);
                             // @ts-ignore
-                            CanvasStore.addItem({ x: stageRef.current.getRelativePointerPosition().x,  y: stageRef.current.getRelativePointerPosition().y,})
+                            CanvasStore.addItem({ x: stageRef.current.getRelativePointerPosition().x-25,  y: stageRef.current.getRelativePointerPosition().y-25,})
                         }}
                         onDragOver={e => e.preventDefault()}
                     >
@@ -99,6 +101,6 @@ const Canvas = observer(() => {
             </Grid>
         </div>
     );
-})
+}
 
 export default Canvas;

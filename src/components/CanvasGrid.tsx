@@ -5,7 +5,7 @@ import {observer} from "mobx-react-lite";
 /**size of grid */
 const WIDTH = 100;
 const HEIGHT = 100;
-const STROKE = 0.1;
+const STROKE = 0.2;
 
 
 const CanvasGrid = observer (() => {
@@ -20,7 +20,7 @@ const CanvasGrid = observer (() => {
     let i = 0;
     for (let x = startX; x < endX; x += WIDTH) {
         for (let y = startY; y < endY; y += HEIGHT) {
-            if (i === 4) {
+            if (i === 50) {
                 i = 0;
             }
             gridComponents.push(
