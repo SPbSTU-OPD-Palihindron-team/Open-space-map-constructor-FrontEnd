@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Circle, Layer, Stage, Text, Image, KonvaNodeComponent} from "react-konva";
 import CanvasGrid from "./CanvasGrid";
 import {observer} from "mobx-react-lite";
@@ -9,6 +9,9 @@ import CanvasItems from "./CanvasItems";
 
 
 const Canvas = () => {
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+    }, []);
 
     /**States for test to show coordinates of mouse*/
     const [curX, setCurX] = useState(0);
