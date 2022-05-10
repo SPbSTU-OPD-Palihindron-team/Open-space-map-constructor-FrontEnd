@@ -1,14 +1,24 @@
 import {makeAutoObservable} from "mobx";
 import {ItemType} from "../types/ItemType";
 import {PointType} from "../types/PointType";
+import {Wall} from "../openapi/models/Wall";
 
 
 class CanvasStore{
     private absolutePosition : PointType = {x: 0, y: 0};
     private scale: number = 1.0;
     private itemsArray: ItemType[] = [];
+
+    private wallsArray: Wall[] = [];
+    public isWallToolActive = false;
+
+    public clickCounter = 0;
+
     /*TODO: maybe make global keys for props to ensure their uniqueness*/
     private key = 1;
+    private wallIndex = 0;
+    private floorIndex = 0;
+
     chosenImage : string | null = null;
 
     constructor() {
@@ -35,6 +45,32 @@ class CanvasStore{
         }
         this.itemsArray[index].x = x;
         this.itemsArray[index].y = y;
+    }
+
+    addWall(line: PointType[]){
+        const wall : Wall = {
+            wall_id: ++this.wallIndex,
+            floor_id:  this.floorIndex,
+            form: [{point:line[0]}, {point:line[1]}],
+        }
+        this.wallsArray.push(wall);
+    }
+
+    // dragWall(key: number, x: number, y: number): void{
+    //     const index = this.wallsArray.findIndex(wall => wall.wall_id === key)
+    //     if(index == undefined){
+    //         return;
+    //     }
+    //     this.wallsArray[index]. = x;
+    //     this.wallsArray[index].y = y;
+    // }
+
+    handleWallToolActive = () =>{
+        this.isWallToolActive = !this.isWallToolActive;
+    }
+
+    get walls(){
+        return this.wallsArray;
     }
 
     get images(){
