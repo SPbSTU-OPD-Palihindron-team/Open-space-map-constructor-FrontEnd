@@ -2,8 +2,6 @@ import {makeAutoObservable} from "mobx";
 import {ItemType} from "../types/ItemType";
 import {PointType} from "../types/PointType";
 import {Wall} from "../openapi/models/Wall";
-import Konva from "konva";
-import {VectorType} from "../types/VectorType";
 
 
 class CanvasStore{
@@ -70,16 +68,6 @@ class CanvasStore{
     handleWallToolActive = () =>{
         this.isWallToolActive = !this.isWallToolActive;
     }
-
-     wallArrOfCord = (wallIndex: number) => {
-        let arrOfCoordinates: number[] = [];
-        const wall = this.wallsArray[wallIndex];
-        for(let i = 0; i< wall.form.length; i++){
-            arrOfCoordinates.push(wall.form[i].point.x, wall.form[i].point.y);
-        }
-        return arrOfCoordinates;
-    }
-
 
     get walls(){
         return this.wallsArray;
