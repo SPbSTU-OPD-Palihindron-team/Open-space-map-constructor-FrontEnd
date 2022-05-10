@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Circle, Layer, Stage, Text, Image, KonvaNodeComponent} from "react-konva";
+import {Layer, Stage, Text} from "react-konva";
 import CanvasGrid from "./CanvasGrid";
 import {observer} from "mobx-react-lite";
-import CanvasStore from "../stores/CanvasStore";
-import LeftSlideMenu from "./LeftSlideMenu";
+import CanvasStore from "../../stores/CanvasStore";
+import LeftSlideMenu from "../LeftSlideMenu";
 import {Grid} from "@mui/material";
 import CanvasItems from "./CanvasItems";
+import CanvasWalls from "./CanvasWalls";
 
 
-const Canvas = () => {
+const Canvas = observer(() => {
     useEffect(() => {
         document.body.style.overflow = "hidden";
     }, []);
@@ -16,6 +17,7 @@ const Canvas = () => {
     /**States for test to show coordinates of mouse*/
     const [curX, setCurX] = useState(0);
     const [curY, setCurY] = useState(0);
+    const [fixedPos, setFixedPos] = useState({x:0,y:0});
 
     const stageRef = React.useRef(null);
 
@@ -24,7 +26,7 @@ const Canvas = () => {
     const handleWheelZoom =  (e: any) => {
         e.evt.preventDefault();
 
-        const scaleBy = 1.02;
+        const scaleBy = 1.03;
         const stage = e.target.getStage();
         const oldScale = stage.scaleX();
         const pointer = stage.getPointerPosition();
@@ -49,12 +51,29 @@ const Canvas = () => {
     };
 
     /**Test function that shows coordinates of mouse */
-    const handleMouseMove = (e: any) =>{
+    const handleMouseMove = (e: any) => {
         e.evt.preventDefault();
         const stage = e.target.getStage();
-        setCurX(stage.getPointerPosition().x);
-        setCurY(stage.getPointerPosition().y);
+        setCurX(stage.getRelativePointerPosition().x);
+        setCurY(stage.getRelativePointerPosition().y);
     }
+
+
+    const handleOnClick = (e:any) => {
+        if (CanvasStore.isWallToolActive){
+            const position = e.target.getStage().getRelativePointerPosition();
+            CanvasStore.clickCounter++;
+            if(CanvasStore.clickCounter === 1) {
+                setFixedPos({x:position.x, y:position.y});
+                console.log(CanvasStore.clickCounter);
+            }
+            if( CanvasStore.clickCounter === 2) {
+                CanvasStore.addWall([fixedPos, {x:curX, y:curY}]);
+                CanvasStore.clickCounter = 0;
+            }
+        }
+    }
+
     return (
         <div>
             {/*Test Text that shows coordinates of mouse */}
@@ -64,25 +83,25 @@ const Canvas = () => {
                 justifyContent="flex-start"
             >
                 <Grid item>
-                    <LeftSlideMenu/>
+                    <LeftSlideMenu />
                 </Grid>
                 <Grid item>
                     <div id="canvas"
-                        onDrop={e =>{
+                         onDrop={e =>{
                             e.preventDefault();
                             /*TODO: remove ignore */
                             // @ts-ignore
                             stageRef.current.setPointersPositions(e);
                             // @ts-ignore
                             CanvasStore.addItem({ x: stageRef.current.getRelativePointerPosition().x-25,  y: stageRef.current.getRelativePointerPosition().y-25,})
-                        }}
-                        onDragOver={e => e.preventDefault()}
+                         }}
+                         onDragOver={e => e.preventDefault()}
                     >
                         <Stage
                             ref={stageRef}
                             width={window.innerWidth}
                             height={window.innerHeight}
-                            draggable
+                            draggable={true}
                             onWheel={handleWheelZoom}
                             scaleX={CanvasStore.canvasScale}
                             scaleY={CanvasStore.canvasScale}
@@ -91,12 +110,19 @@ const Canvas = () => {
                             onMouseMove={handleMouseMove}
                             /*TODO: any should be replaced with explicit type */
                             onDragEnd={(e: any) => {CanvasStore.canvasPosition = e.currentTarget.position();}}
+
+                            onClick={handleOnClick}
                         >
                             <Layer>
-                                <CanvasGrid/>
+                                <CanvasGrid />
                             </Layer>
+
                             <Layer>
-                                <CanvasItems/>
+                                <CanvasItems />
+                            </Layer>
+
+                            <Layer>
+                                <CanvasWalls x={fixedPos.x} y={fixedPos.y} curX={curX} curY={curY} />
                             </Layer>
                         </Stage>
                     </div>
@@ -104,6 +130,6 @@ const Canvas = () => {
             </Grid>
         </div>
     );
-}
+})
 
 export default Canvas;

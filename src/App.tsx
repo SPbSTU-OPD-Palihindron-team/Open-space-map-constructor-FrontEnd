@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Canvas from "./components/Canvas";
+import Canvas from "./components/Canvas/Canvas";
 import RightSlideMenu from "./components/RightSlideMenu/RightSlideMenu";
 
 

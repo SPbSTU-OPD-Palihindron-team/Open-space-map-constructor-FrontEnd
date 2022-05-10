@@ -1,6 +1,6 @@
 import React from 'react';
 import {Group, Rect} from "react-konva";
-import CanvasStore from "../stores/CanvasStore";
+import CanvasStore from "../../stores/CanvasStore";
 import {observer} from "mobx-react-lite";
 /**size of grid */
 const WIDTH = 100;
