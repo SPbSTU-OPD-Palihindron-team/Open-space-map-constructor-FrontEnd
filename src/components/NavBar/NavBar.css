@@ -1,0 +1,33 @@
+.navbar {
+    width: 100%;
+}
+
+.toolbar {
+    background-color: #161e40;
+}
+
+.profile {
+    margin-left: auto;
+}
+
+
+.navBarInform {
+    margin-right: 15px;
+}
+
+.child {
+    margin-right: 8px;
+    margin-left: 8px;
+    display: inline-block;
+}
+
+
+.selectBuilding {
+    background-color: white;
+    border-radius: 7px;
+}
+
+.selectRoom {
+    background-color: white;
+    border-radius: 7px;
+}
