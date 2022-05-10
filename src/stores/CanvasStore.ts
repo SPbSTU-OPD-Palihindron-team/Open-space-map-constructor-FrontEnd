@@ -1,7 +1,7 @@
 import {makeAutoObservable} from "mobx";
 import {ItemType} from "../types/ItemType";
 import {PointType} from "../types/PointType";
-import {Wall} from "../openapi/models/Wall";
+import {Wall} from "../openapi";
 
 
 class CanvasStore{
