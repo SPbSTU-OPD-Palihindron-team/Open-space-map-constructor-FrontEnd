@@ -59,6 +59,7 @@ const Canvas = observer(() => {
     }
 
 
+
     const handleOnClick = (e:any) => {
         if (CanvasStore.isWallToolActive){
             const position = e.target.getStage().getRelativePointerPosition();

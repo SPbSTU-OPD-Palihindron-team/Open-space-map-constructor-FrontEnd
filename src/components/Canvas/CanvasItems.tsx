@@ -4,7 +4,7 @@ import CanvasStore from "../../stores/CanvasStore";
 import {icons} from "../../assets/images/icons/icons";
 import useImage from "use-image";
 import {observer} from "mobx-react-lite";
-import {ItemType} from "../../types/ItemType";
+import {ItemType} from "../../openapi";
 
 const CanvasItems = observer( () => {
 
@@ -19,25 +19,32 @@ const CanvasItems = observer( () => {
     }
 
     const URLImage = (item: ItemType) => {
-        const [image] = useImage(item.src);
+        if(!item.pictureLink){
+            /*TODO include default picture*/
+            item.pictureLink = icons['red'];
+        }
+        const [image] = useImage(item.pictureLink);
         return <Image
                 image={image}
-                x={item.x}
-                y={item.y}
+                x={item.polygon.point.x}
+                y={item.polygon.point.y}
                 size={{width: 50, height:50}}
                 draggable={true}
-                key={item._key}
+                key={item.itemType_id}
                 onMouseEnter={e => handlePointerCursor(e)}
                 onMouseLeave={e => handleDefaultCursor(e)}
-                onDragEnd={(event) =>
-                    CanvasStore.dragItem(item._key, event.target.x(),  event.target.y())
+                onDragEnd={(event) => {
+                    const newPoint = {x: event.target.x(), y: event.target.y()}
+                    CanvasStore.dragItem(item, newPoint);
+                }
         }/>;
 
     }
     return (
         <Group>
             {CanvasStore.images.map(image =>{
-                return <URLImage src={icons[image.src]} x={image.x} y={image.y} _key={image._key} />;
+                if(image.pictureLink )
+                    return <URLImage pictureLink={icons[image.pictureLink]} polygon={image.polygon} itemType_id={image.itemType_id} itemName={image.itemName} valuablePlacement={''}/>;
             })}
         </Group>
 

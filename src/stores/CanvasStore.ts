@@ -1,10 +1,14 @@
 import {makeAutoObservable} from "mobx";
-import {ItemType} from "../types/ItemType";
+import {ItemType, Wall} from "../openapi";
 import {PointType} from "../types/PointType";
-import {Wall} from "../openapi";
+import {UndoRedoAdapter} from "./undo_redo/UndoRedoAdapter";
+import {DragItem} from "./undo_redo/actions/DragItem";
+import {DeleteItem} from "./undo_redo/actions/DeleteItem";
+import {AddItem} from "./undo_redo/actions/AddItem";
 
 
 class CanvasStore{
+    private undoRedoAdapter = new UndoRedoAdapter();
     private absolutePosition : PointType = {x: 0, y: 0};
     private scale: number = 1.0;
     private itemsArray: ItemType[] = [];
@@ -25,27 +29,65 @@ class CanvasStore{
         makeAutoObservable(this);
     }
 
+    undo(): void{
+        this.undoRedoAdapter.undo()
+    }
+
+    redo(): void{
+        this.undoRedoAdapter.redo()
+    }
+
     addItem(coordinates: PointType){
         if(this.chosenImage == null){
             return;
         }
         const item : ItemType ={
-            src: this.chosenImage,
-            _key: ++this.key,
-            x: coordinates.x,
-            y: coordinates.y,
+            itemName: "",
+            valuablePlacement: "",
+            pictureLink: this.chosenImage,
+            itemType_id: ++this.key,
+            polygon : {
+                point:{
+                    x: coordinates.x,
+                    y: coordinates.y,
+                }
+            }
+
         }
+        this.undoRedoAdapter.addAction(new AddItem(item));
         this.itemsArray.push(item);
     }
 
-    dragItem(key: number, x: number, y: number): void{
-        const index = this.itemsArray.findIndex(item => item._key === key)
+    readdItem(item: ItemType){
+        this.itemsArray.push(item);
+    }
+
+    dragItem(item: ItemType, newPoint : {x: number, y: number}, undoRedoSkip: boolean = false): void{
+        const index = this.itemsArray.findIndex(i => i.itemType_id === item.itemType_id)
         if(index == undefined){
             return;
         }
-        this.itemsArray[index].x = x;
-        this.itemsArray[index].y = y;
+        if(!undoRedoSkip){
+            this.undoRedoAdapter.addAction(new DragItem(item, {x: newPoint.x, y: newPoint.y}))
+        }
+        this.itemsArray[index].polygon.point.x = newPoint.x;
+        this.itemsArray[index].polygon.point.y = newPoint.y;
+        if(undoRedoSkip){
+            this.itemsArray = this.itemsArray.slice()
+            }
     }
+
+    deleteItem(item: ItemType, undoRedoSkip: boolean = false){
+        const index = this.itemsArray.findIndex(i => i.itemType_id === item.itemType_id)
+        if(index == undefined){
+            return;
+        }
+        if(!undoRedoSkip){
+            this.undoRedoAdapter.addAction(new DeleteItem(item))
+        }
+        this.itemsArray.splice(index,1);
+    }
+
 
     addWall(line: PointType[]){
         const wall : Wall = {
