@@ -3,7 +3,7 @@ import {Layer, Stage, Text} from "react-konva";
 import CanvasGrid from "./CanvasGrid";
 import {observer} from "mobx-react-lite";
 import CanvasStore from "../../stores/CanvasStore";
-import LeftSlideMenu from "../LeftSlideMenu";
+import LeftSlideMenu from "../LeftSlideMenu/LeftSlideMenu";
 import {Grid} from "@mui/material";
 import CanvasItems from "./CanvasItems";
 import CanvasWalls from "./CanvasWalls";
@@ -80,7 +80,7 @@ const Canvas = observer(() => {
     return (
         <div>
             {/*Test Text that shows coordinates of mouse */}
-            <Text>{curX}, {curY}, {CanvasStore.canvasScale}</Text>
+            <div style={{position:"fixed", bottom: 0}}>Coords: {curX}, {curY}, zoom: {CanvasStore.canvasScale}</div>
             <Grid
                 container
                 justifyContent="flex-start"

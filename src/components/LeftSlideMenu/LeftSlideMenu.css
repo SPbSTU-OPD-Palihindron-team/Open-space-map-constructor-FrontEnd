@@ -1,0 +1,41 @@
+.left-slide-menu{
+    margin-top: 70px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    width: 165px;
+    position: absolute;
+    z-index: 100;
+
+}
+
+.menu-button{
+    border: 1px solid black;
+    width: 100%;
+    height: 40px;
+}
+
+ .wall-tool-default {
+    max-block-size: 50px;
+}
+
+.wall-tool-active {
+    background-color: #708090;
+    border-color: black;
+    max-block-size: 50px;
+
+}
+
+.icons{
+    columns:3;
+    max-block-size: 50px;
+    display: table-column-group;
+    grid-auto-columns: auto;
+    margin: 1px;
+}
+
+.icon-text{
+    margin-top:0;
+    margin-bottom: 20px;
+    text-align: center;
+}

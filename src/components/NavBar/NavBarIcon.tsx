@@ -15,7 +15,7 @@ interface IconProps {
 
 const NavBarIcon: React.FC<IconProps> = observer (({active, setActive})  =>{
     return (
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={2}>
             <IconButton
                 aria-label="icon"
                 onClick={() => setActive(false)}
@@ -30,7 +30,7 @@ const NavBarIcon: React.FC<IconProps> = observer (({active, setActive})  =>{
                 disabled={active}
                 color='inherit'
             >
-                <SaveIcon/>
+                <SaveIcon />
             </IconButton>
             <IconButton
                 aria-label="icon"
