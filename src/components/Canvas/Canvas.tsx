@@ -79,12 +79,6 @@ const Canvas = observer(() => {
         <div>
             {/*Test Text that shows coordinates of mouse */}
             <Text>{curX}, {curY}, {CanvasStore.canvasScale}</Text>
-            <button name={'undo'} onClick={() => CanvasStore.undo()} style={{
-                width: '50px',
-                height: '20px'}}> undo </button>
-            <button name={'redo'} onClick={() => CanvasStore.redo()} style={{
-                width: '50px',
-                height: '20px'}}> redo </button>
             <Grid
                 container
                 justifyContent="flex-start"

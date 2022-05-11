@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
 import SaveIcon from '@mui/icons-material/Save';
+import CanvasStore from "../../stores/CanvasStore";
 
 interface IconProps {
     active: any;
@@ -36,7 +37,7 @@ const NavBarIcon: React.FC<IconProps> = ({active, setActive}) =>{
                 disabled={active}
                 color='inherit'
             >
-                <UndoIcon/>
+                <UndoIcon onClick={() => CanvasStore.undo()}/>
             </IconButton>
             <IconButton
                 aria-label="icon"
@@ -44,7 +45,7 @@ const NavBarIcon: React.FC<IconProps> = ({active, setActive}) =>{
                 disabled={active}
                 color='inherit'
             >
-                <RedoIcon/>
+                <RedoIcon onClick={() => CanvasStore.redo()}/>
             </IconButton>
         </Stack>
     );
