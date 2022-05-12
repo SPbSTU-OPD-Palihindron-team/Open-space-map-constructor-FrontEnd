@@ -16,10 +16,14 @@ const CanvasContextMenu = () => {
                         onClick={(e) => handleDelete()}
                     >Delete</button>
 
-                <button id="canvas__context-menu__button_bring-to-front">
-
+                <button id="canvas__context-menu__button_bring-to-front"
+                    onClick={() => CanvasStore.bringFront()}
+                >
                     Bring to front</button>
-                <button id="canvas__context-menu__button_send-to-back">Send to back</button>
+                <button id="canvas__context-menu__button_send-to-back"
+                        onClick={() => CanvasStore.sendBack()}
+                >
+                    Send to back</button>
             </div>
         </div>
     );

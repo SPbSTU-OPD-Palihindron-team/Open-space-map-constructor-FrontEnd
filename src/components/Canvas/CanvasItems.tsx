@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {Group, Image, Layer} from "react-konva";
 import CanvasStore from "../../stores/CanvasStore";
 import {icons} from "../../assets/images/icons/icons";
@@ -9,7 +9,6 @@ import Konva from "konva";
 import KonvaEventObject = Konva.KonvaEventObject;
 
 const CanvasItems = observer( () => {
-
     const handleOnClick = (item: ItemType) => {
         console.log(item);
         CanvasStore.chosenItem = item;
@@ -40,14 +39,18 @@ const CanvasItems = observer( () => {
         CanvasStore.contextMenu.style.left = containerRect.left + stage.getPointerPosition()!.x + 4 + 'px';
     }
 
+
     const URLImage = (item: ItemType) => {
         if(!item.pictureLink){
             /*TODO include default picture*/
             item.pictureLink = icons['red'];
         }
         const [image] = useImage(item.pictureLink);
+
+
         return <Image
                 image={image}
+                //ref={(node) => CanvasStore.ref = node}
                 x={item.polygon.point.x}
                 y={item.polygon.point.y}
                 size={{width: 50, height:50}}
@@ -60,7 +63,7 @@ const CanvasItems = observer( () => {
                     CanvasStore.dragItem(item, newPoint);
                 }}
                 onContextMenu={(e) => handleContextMenu(e)}
-                onClick={(e) => handleOnClick(item)}
+                onClick={(e) => { CanvasStore.currentItemRef = e.target; handleOnClick(item);}}
         />;
 
     }

@@ -6,13 +6,14 @@ import {DragItem} from "./undo_redo/actions/DragItem";
 import {DeleteItem} from "./undo_redo/actions/DeleteItem";
 import {AddItem} from "./undo_redo/actions/AddItem";
 import {icons} from "../assets/images/icons/icons";
+import Konva from "konva";
 
 
 class CanvasStore{
     private undoRedoAdapter = new UndoRedoAdapter();
     private absolutePosition : PointType = {x: 0, y: 0};
     private scale: number = 1.0;
-    private itemsArray: ItemType[] = [];
+    public itemsArray: ItemType[] = [];
 
     public contextMenu: HTMLElement | null = null;
 
@@ -21,6 +22,7 @@ class CanvasStore{
 
     public clickCounter = 0;
 
+    public currentItemRef:  Konva.Shape | Konva.Stage | null = null;
     /*TODO: maybe make global keys for props to ensure their uniqueness*/
     private key = 1;
     private wallIndex = 0;
@@ -29,8 +31,20 @@ class CanvasStore{
     chosenImage : string | null = null;
     //Chosen item on context menu. Do it private?
     chosenItem : ItemType | null = null;
+
     constructor() {
         makeAutoObservable(this);
+    }
+
+    bringFront(){
+        if(this.currentItemRef){
+            this.currentItemRef.moveToTop();
+        }
+    }
+    sendBack(){
+        if(this.currentItemRef){
+            this.currentItemRef.moveToBottom();
+        }
     }
 
     undo(): void{
