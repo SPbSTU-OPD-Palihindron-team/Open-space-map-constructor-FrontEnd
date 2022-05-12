@@ -7,6 +7,7 @@ import {DeleteItem} from "./undo_redo/actions/DeleteItem";
 import {AddItem} from "./undo_redo/actions/AddItem";
 import {icons} from "../assets/images/icons/icons";
 import Konva from "konva";
+import {SendItemBackFront} from "./undo_redo/actions/SendItemBackFront";
 
 
 class CanvasStore{
@@ -38,12 +39,18 @@ class CanvasStore{
 
     bringFront(){
         if(this.currentItemRef){
+            const prevZIndex = this.currentItemRef.zIndex();
             this.currentItemRef.moveToTop();
+            const nextZIndex = this.currentItemRef.zIndex();
+            this.undoRedoAdapter.addAction(new SendItemBackFront(this.currentItemRef,prevZIndex,nextZIndex));
         }
     }
     sendBack(){
         if(this.currentItemRef){
+            const prevZIndex = this.currentItemRef.zIndex();
             this.currentItemRef.moveToBottom();
+            const nextZIndex = this.currentItemRef.zIndex();
+            this.undoRedoAdapter.addAction(new SendItemBackFront(this.currentItemRef,prevZIndex,nextZIndex));
         }
     }
 
