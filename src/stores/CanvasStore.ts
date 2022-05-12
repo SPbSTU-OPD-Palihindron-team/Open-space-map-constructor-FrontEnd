@@ -5,6 +5,7 @@ import {UndoRedoAdapter} from "./undo_redo/UndoRedoAdapter";
 import {DragItem} from "./undo_redo/actions/DragItem";
 import {DeleteItem} from "./undo_redo/actions/DeleteItem";
 import {AddItem} from "./undo_redo/actions/AddItem";
+import {icons} from "../assets/images/icons/icons";
 
 
 class CanvasStore{
@@ -12,6 +13,8 @@ class CanvasStore{
     private absolutePosition : PointType = {x: 0, y: 0};
     private scale: number = 1.0;
     private itemsArray: ItemType[] = [];
+
+    public contextMenu: HTMLElement | null = null;
 
     private wallsArray: Wall[] = [];
     public isWallToolActive = false;
@@ -46,7 +49,7 @@ class CanvasStore{
         const item : ItemType ={
             itemName: "",
             valuablePlacement: "",
-            pictureLink: this.chosenImage,
+            pictureLink: icons[this.chosenImage],
             itemType_id: ++this.key,
             polygon : {
                 point:{

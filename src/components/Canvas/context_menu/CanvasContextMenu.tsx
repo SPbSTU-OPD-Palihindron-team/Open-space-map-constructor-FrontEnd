@@ -2,12 +2,12 @@ import React from 'react';
 import './CanvasContextMenu.css'
 import CanvasStore from "../../../stores/CanvasStore";
 const CanvasContextMenu = () => {
-    const contextMenu = document.getElementById('canvas__context-menu');
+
     const handleDelete = () => {
         if(!CanvasStore.chosenItem) return;
-        //CanvasStore.deleteItem(CanvasStore.chosenItem);
-        if(!contextMenu) return;
-        contextMenu.style.display = 'none';
+        CanvasStore.deleteItem(CanvasStore.chosenItem);
+        if(!CanvasStore.contextMenu) return;
+        CanvasStore.contextMenu.style.display = 'none';
     }
     return (
         <div id="canvas__context-menu">

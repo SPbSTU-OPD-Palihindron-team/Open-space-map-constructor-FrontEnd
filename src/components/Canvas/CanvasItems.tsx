@@ -10,8 +10,6 @@ import KonvaEventObject = Konva.KonvaEventObject;
 
 const CanvasItems = observer( () => {
 
-    const contextMenu = document.getElementById('canvas__context-menu');
-
     const handleOnClick = (item: ItemType) => {
         console.log(item);
         CanvasStore.chosenItem = item;
@@ -32,15 +30,14 @@ const CanvasItems = observer( () => {
     const handleContextMenu = (e : KonvaEventObject<PointerEvent>) =>{
         if(!e) return;
         e.evt.preventDefault();
-        if(!contextMenu) return;
+        if(!CanvasStore.contextMenu) return;
         const stage = e.target.getStage();
         if(!stage) return;
         const containerRect = stage.container().getBoundingClientRect();
         if(!containerRect) return;
-        console.log(contextMenu);
-        contextMenu.style.display = 'initial';
-        contextMenu.style.top = containerRect.top + stage.getPointerPosition()!.y + 4 + 'px';
-        contextMenu.style.left = containerRect.left + stage.getPointerPosition()!.x + 4 + 'px';
+        CanvasStore.contextMenu.style.display = 'initial';
+        CanvasStore.contextMenu.style.top = containerRect.top + stage.getPointerPosition()!.y + 4 + 'px';
+        CanvasStore.contextMenu.style.left = containerRect.left + stage.getPointerPosition()!.x + 4 + 'px';
     }
 
     const URLImage = (item: ItemType) => {
@@ -71,7 +68,8 @@ const CanvasItems = observer( () => {
         <Group>
             {CanvasStore.images.map(image =>{
                 if(image.pictureLink )
-                    return <URLImage pictureLink={icons[image.pictureLink]} polygon={image.polygon} itemType_id={image.itemType_id} itemName={image.itemName} valuablePlacement={''}/>;
+                   // return <URLImage pictureLink={icons[image.pictureLink]} polygon={image.polygon} itemType_id={image.itemType_id} itemName={image.itemName} valuablePlacement={''}/>;
+                    return <URLImage pictureLink={image.pictureLink} polygon={image.polygon} itemType_id={image.itemType_id} itemName={image.itemName} valuablePlacement={''}/>;
             })}
         </Group>
 
