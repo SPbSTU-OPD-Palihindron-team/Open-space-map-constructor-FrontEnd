@@ -22,9 +22,10 @@ class CanvasStore{
     private key = 1;
     private wallIndex = 0;
     private floorIndex = 0;
-
+    //Chosen image when drag&drop
     chosenImage : string | null = null;
-
+    //Chosen item on context menu. Do it private?
+    chosenItem : ItemType | null = null;
     constructor() {
         makeAutoObservable(this);
     }
@@ -41,6 +42,7 @@ class CanvasStore{
         if(this.chosenImage == null){
             return;
         }
+        console.log("chosen image",this.chosenImage);
         const item : ItemType ={
             itemName: "",
             valuablePlacement: "",
@@ -74,7 +76,7 @@ class CanvasStore{
         this.itemsArray[index].polygon.point.y = newPoint.y;
         if(undoRedoSkip){
             this.itemsArray = this.itemsArray.slice()
-            }
+        }
     }
 
     deleteItem(item: ItemType, undoRedoSkip: boolean = false){

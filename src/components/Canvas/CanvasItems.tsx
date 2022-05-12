@@ -5,17 +5,42 @@ import {icons} from "../../assets/images/icons/icons";
 import useImage from "use-image";
 import {observer} from "mobx-react-lite";
 import {ItemType} from "../../openapi";
+import Konva from "konva";
+import KonvaEventObject = Konva.KonvaEventObject;
 
 const CanvasItems = observer( () => {
 
-    const handlePointerCursor= (e:any) => {
-        const container = e.target.getStage().container();
+    const contextMenu = document.getElementById('canvas__context-menu');
+
+    const handleOnClick = (item: ItemType) => {
+        console.log(item);
+        CanvasStore.chosenItem = item;
+    }
+
+    const handlePointerCursor= (e: KonvaEventObject<MouseEvent>) => {
+        if(!e) return;
+        const container = e!.target!.getStage()!.container();
         container.style.cursor = "pointer";
     }
 
-    const handleDefaultCursor= (e:any) => {
-        const container = e.target.getStage().container();
+    const handleDefaultCursor= (e: KonvaEventObject<MouseEvent>) => {
+        if(!e) return;
+        const container = e!.target!.getStage()!.container();
         container.style.cursor = "default";
+    }
+
+    const handleContextMenu = (e : KonvaEventObject<PointerEvent>) =>{
+        if(!e) return;
+        e.evt.preventDefault();
+        if(!contextMenu) return;
+        const stage = e.target.getStage();
+        if(!stage) return;
+        const containerRect = stage.container().getBoundingClientRect();
+        if(!containerRect) return;
+        console.log(contextMenu);
+        contextMenu.style.display = 'initial';
+        contextMenu.style.top = containerRect.top + stage.getPointerPosition()!.y + 4 + 'px';
+        contextMenu.style.left = containerRect.left + stage.getPointerPosition()!.x + 4 + 'px';
     }
 
     const URLImage = (item: ItemType) => {
@@ -31,13 +56,15 @@ const CanvasItems = observer( () => {
                 size={{width: 50, height:50}}
                 draggable={true}
                 key={item.itemType_id}
-                onMouseEnter={e => handlePointerCursor(e)}
+                onMouseEnter={(e) => handlePointerCursor(e)}
                 onMouseLeave={e => handleDefaultCursor(e)}
                 onDragEnd={(event) => {
                     const newPoint = {x: event.target.x(), y: event.target.y()}
                     CanvasStore.dragItem(item, newPoint);
-                }
-        }/>;
+                }}
+                onContextMenu={(e) => handleContextMenu(e)}
+                onClick={(e) => handleOnClick(item)}
+        />;
 
     }
     return (

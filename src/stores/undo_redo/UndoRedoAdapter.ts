@@ -13,7 +13,7 @@ export class UndoRedoAdapter {
     }
     undo(): void {
         if(this.index < 0){
-            return
+            return;
         }
         this.history[this.index].undo();
         this.index--;

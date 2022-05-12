@@ -1,0 +1,20 @@
+#canvas__context-menu{
+    display: none;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    box-shadow: 0 0 5px grey;
+    border-radius: 3px;
+}
+#canvas__context-menu button {
+    width: 100%;
+    background-color: white;
+    border: none;
+    margin: 0;
+    padding: 10px;
+}
+
+#canvas__context-menu button:hover {
+    background-color: lightgray;
+}
