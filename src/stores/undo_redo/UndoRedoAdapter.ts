@@ -1,4 +1,5 @@
 import {Action} from "./Action";
+import CanvasStore from "../CanvasStore";
 
 export class UndoRedoAdapter {
     private history: Action[] = [];
@@ -10,6 +11,7 @@ export class UndoRedoAdapter {
         }
         this.index++;
         this.history[this.index].redo();
+        CanvasStore.setUndoRedoBlocked();
     }
     undo(): void {
         if(this.index < 0){
@@ -17,6 +19,7 @@ export class UndoRedoAdapter {
         }
         this.history[this.index].undo();
         this.index--;
+        CanvasStore.setUndoRedoBlocked();
     }
     addAction(action : Action) : void {
         if(this.index + 1 != this.history.length){
@@ -28,5 +31,17 @@ export class UndoRedoAdapter {
             this.history.shift();
         }
         this.index = this.history.length - 1;
+        CanvasStore.setUndoRedoBlocked();
+    }
+    getUndoRedoStatus() : {undoBlocked: boolean, redoBlocked: boolean} {
+        let undoBlocked: boolean = false;
+        let redoBlocked: boolean = false;
+        if(this.index === -1){
+            undoBlocked = true;
+        }
+        if(this.index === this.history.length-1){
+            redoBlocked = true;
+        }
+        return {undoBlocked: undoBlocked, redoBlocked: redoBlocked};
     }
 }

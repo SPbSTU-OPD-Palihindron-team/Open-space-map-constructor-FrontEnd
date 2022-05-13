@@ -94,7 +94,7 @@ class CanvasStore{
             return;
         }
         if(!undoRedoSkip){
-            this.undoRedoAdapter.addAction(new DragItem(item, {x: newPoint.x, y: newPoint.y}))
+            this.undoRedoAdapter.addAction(new DragItem(item, {x: newPoint.x, y: newPoint.y}));
         }
         this.itemsArray[index].polygon.point.x = newPoint.x;
         this.itemsArray[index].polygon.point.y = newPoint.y;
@@ -156,5 +156,12 @@ class CanvasStore{
     get canvasPosition(){
         return this.absolutePosition;
     }
+    public undoBlocked = true;
+    public redoBlocked = true;
+    public setUndoRedoBlocked(){
+        this.redoBlocked = this.undoRedoAdapter.getUndoRedoStatus().redoBlocked;
+        this.undoBlocked = this.undoRedoAdapter.getUndoRedoStatus().undoBlocked;
+    }
+
 }
 export default new CanvasStore();
