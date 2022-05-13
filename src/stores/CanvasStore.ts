@@ -5,28 +5,53 @@ import {UndoRedoAdapter} from "./undo_redo/UndoRedoAdapter";
 import {DragItem} from "./undo_redo/actions/DragItem";
 import {DeleteItem} from "./undo_redo/actions/DeleteItem";
 import {AddItem} from "./undo_redo/actions/AddItem";
+import {icons} from "../assets/images/icons/icons";
+import Konva from "konva";
+import {SendItemBackFront} from "./undo_redo/actions/SendItemBackFront";
 
 
 class CanvasStore{
     private undoRedoAdapter = new UndoRedoAdapter();
     private absolutePosition : PointType = {x: 0, y: 0};
     private scale: number = 1.0;
-    private itemsArray: ItemType[] = [];
+    public itemsArray: ItemType[] = [];
+
+    public contextMenu: HTMLElement | null = null;
 
     private wallsArray: Wall[] = [];
     public isWallToolActive = false;
 
     public clickCounter = 0;
 
+    public currentItemRef:  Konva.Shape | Konva.Stage | null = null;
     /*TODO: maybe make global keys for props to ensure their uniqueness*/
     private key = 1;
     private wallIndex = 0;
     private floorIndex = 0;
-
+    //Chosen image when drag&drop
     chosenImage : string | null = null;
+    //Chosen item on context menu. Do it private?
+    chosenItem : ItemType | null = null;
 
     constructor() {
         makeAutoObservable(this);
+    }
+
+    bringFront(){
+        if(this.currentItemRef){
+            const prevZIndex = this.currentItemRef.zIndex();
+            this.currentItemRef.moveToTop();
+            const nextZIndex = this.currentItemRef.zIndex();
+            this.undoRedoAdapter.addAction(new SendItemBackFront(this.currentItemRef,prevZIndex,nextZIndex));
+        }
+    }
+    sendBack(){
+        if(this.currentItemRef){
+            const prevZIndex = this.currentItemRef.zIndex();
+            this.currentItemRef.moveToBottom();
+            const nextZIndex = this.currentItemRef.zIndex();
+            this.undoRedoAdapter.addAction(new SendItemBackFront(this.currentItemRef,prevZIndex,nextZIndex));
+        }
     }
 
     undo(): void{
@@ -41,10 +66,11 @@ class CanvasStore{
         if(this.chosenImage == null){
             return;
         }
+        console.log("chosen image",this.chosenImage);
         const item : ItemType ={
             itemName: "",
             valuablePlacement: "",
-            pictureLink: this.chosenImage,
+            pictureLink: icons[this.chosenImage],
             itemType_id: ++this.key,
             polygon : {
                 point:{
@@ -68,13 +94,13 @@ class CanvasStore{
             return;
         }
         if(!undoRedoSkip){
-            this.undoRedoAdapter.addAction(new DragItem(item, {x: newPoint.x, y: newPoint.y}))
+            this.undoRedoAdapter.addAction(new DragItem(item, {x: newPoint.x, y: newPoint.y}));
         }
         this.itemsArray[index].polygon.point.x = newPoint.x;
         this.itemsArray[index].polygon.point.y = newPoint.y;
         if(undoRedoSkip){
             this.itemsArray = this.itemsArray.slice()
-            }
+        }
     }
 
     deleteItem(item: ItemType, undoRedoSkip: boolean = false){
@@ -130,5 +156,12 @@ class CanvasStore{
     get canvasPosition(){
         return this.absolutePosition;
     }
+    public undoBlocked = true;
+    public redoBlocked = true;
+    public setUndoRedoBlocked(){
+        this.redoBlocked = this.undoRedoAdapter.getUndoRedoStatus().redoBlocked;
+        this.undoBlocked = this.undoRedoAdapter.getUndoRedoStatus().undoBlocked;
+    }
+
 }
 export default new CanvasStore();
