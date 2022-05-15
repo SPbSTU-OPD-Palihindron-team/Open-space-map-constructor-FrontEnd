@@ -14,7 +14,8 @@ const UrlImage = observer((item: ItemType) => {
         CanvasStore.currentItemRef = e.target;
         CanvasStore.chosenItem = item;
         CanvasStore.setCurrentItemId(item);
-       // console.log('from handle on click', CanvasStore.currentItemId, item.itemType_id)
+        CanvasStore.setCurrentTarget(e.evt.target);
+        e.cancelBubble = true;
     }
 
     const handlePointerCursor = (e: KonvaEventObject<MouseEvent>) => {
@@ -40,7 +41,6 @@ const UrlImage = observer((item: ItemType) => {
         CanvasStore.contextMenu.style.display = 'initial';
         CanvasStore.contextMenu.style.top = containerRect.top + stage.getPointerPosition()!.y + 4 + 'px';
         CanvasStore.contextMenu.style.left = containerRect.left + stage.getPointerPosition()!.x + 4 + 'px';
-        console.log('on context menu');
     }
 
 
@@ -59,12 +59,12 @@ const UrlImage = observer((item: ItemType) => {
     const trRef = React.useRef(null);
     React.useEffect(() => {
         if (CanvasStore.currentItemId === item.itemType_id && trRef != null && trRef.current != null) {
-            // we need to attach transformer manually
             // @ts-ignore
             trRef.current.nodes([shapeRef.current]);
             // @ts-ignore
             trRef.current.getLayer().batchDraw();
-
+            // @ts-ignore
+            trRef.current.moveToTop();
         }
     });
 
@@ -87,10 +87,7 @@ const UrlImage = observer((item: ItemType) => {
                 CanvasStore.dragItem(item, newPoint);
             }}
             onContextMenu={(e) => handleContextMenu(e)}
-            onClick={(e) =>{
-                handleOnClick(e, item);
-                //e.evt.stopImmediatePropagation();
-            }}
+            onClick={(e) =>{handleOnClick(e, item);}}
             onTransformEnd={(e) => {
                 const node = shapeRef.current;
                 if (node != null) {

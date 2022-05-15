@@ -4,19 +4,27 @@ import RightSlideMenu from "./components/RightSlideMenu/RightSlideMenu";
 import NavBar from "./components/NavBar/NavBar";
 import CanvasContextMenu from "./components/Canvas/context_menu/CanvasContextMenu";
 import CanvasStore from "./stores/CanvasStore";
+import {observer} from "mobx-react-lite";
 
 
 
-const App: React.FC =() => {
+const App: React.FC = observer(() => {
     useEffect(() =>{CanvasStore.contextMenu = document.querySelector('#canvas__context-menu') as HTMLElement;})
-    const hideCanvasContextMenu = () => {
+    const hideCanvasContextMenu = (e : any) => {
         if(!CanvasStore.contextMenu) return;
         CanvasStore.contextMenu.style.display = 'none';
     }
+
+    const hideTransformer = (e : any) =>{
+        if(CanvasStore.currentTarget !== e.target){
+            CanvasStore.setCurrentItemId(null);
+        }
+    }
+
     return (
         <div className="App"
-             onClick={(e) => hideCanvasContextMenu()}
-             onDragStart={(e) => hideCanvasContextMenu()}
+             onClick={(e) => {hideCanvasContextMenu(e); hideTransformer(e)} }
+             onDragStart={(e) => {hideCanvasContextMenu(e); hideTransformer(e)}}
         >
             <NavBar/>
             <Canvas/>
@@ -24,6 +32,6 @@ const App: React.FC =() => {
             <RightSlideMenu/>
         </div>
     );
-};
+});
 
 export default App;

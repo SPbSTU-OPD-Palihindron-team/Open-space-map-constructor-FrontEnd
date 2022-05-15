@@ -73,6 +73,8 @@ const Canvas = observer(() => {
                 CanvasStore.clickCounter = 0;
             }
         }
+        //Remove transformer on canvas click
+        CanvasStore.setCurrentItemId(null);
     }
 
     return (

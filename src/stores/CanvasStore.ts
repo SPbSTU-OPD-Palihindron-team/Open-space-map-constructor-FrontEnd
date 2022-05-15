@@ -34,6 +34,12 @@ class CanvasStore{
     //Chosen item on context menu. Do it private?
     chosenItem : ItemType | null = null;
     currentItemId: number | null = null;
+
+    currentTarget: any = null;
+    setCurrentTarget(target: any){
+        this.currentTarget = target;
+    }
+
     constructor() {
         makeAutoObservable(this);
     }
@@ -76,7 +82,6 @@ class CanvasStore{
             return;
         }
         if(!undoRedoSkip){
-            console.log('transform')
             this.undoRedoAdapter.addAction(new TransformItem(item, {x: newPoint.x, y: newPoint.y}, scale, angle));
         }
         this.itemsArray[index].polygon.point.x = newPoint.x;
@@ -88,7 +93,6 @@ class CanvasStore{
         if(this.chosenImage == null){
             return;
         }
-        console.log("chosen image",this.chosenImage);
         const item : ItemType ={
             angle: 0,
             scale: 1,
