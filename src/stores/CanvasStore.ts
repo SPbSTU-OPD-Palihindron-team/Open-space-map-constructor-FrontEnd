@@ -8,13 +8,14 @@ import {AddItem} from "./undo_redo/actions/AddItem";
 import {icons} from "../assets/images/icons/icons";
 import Konva from "konva";
 import {SendItemBackFront} from "./undo_redo/actions/SendItemBackFront";
+import {TransformItem} from "./undo_redo/actions/TransformItem";
 
 
 class CanvasStore{
     private undoRedoAdapter = new UndoRedoAdapter();
     private absolutePosition : PointType = {x: 0, y: 0};
     private scale: number = 1.0;
-    public itemsArray: ItemType[] = [];
+    private itemsArray: ItemType[] = [];
 
     public contextMenu: HTMLElement | null = null;
 
@@ -32,9 +33,22 @@ class CanvasStore{
     chosenImage : string | null = null;
     //Chosen item on context menu. Do it private?
     chosenItem : ItemType | null = null;
+    currentItemId: number | null = null;
+
+    currentTarget: any = null;
+    setCurrentTarget(target: any){
+        this.currentTarget = target;
+    }
 
     constructor() {
         makeAutoObservable(this);
+    }
+
+    setCurrentItemId(item: ItemType | null): void{
+        if(item)
+            this.currentItemId = item.itemType_id;
+        else
+            this.currentItemId = null;
     }
 
     bringFront(){
@@ -62,12 +76,26 @@ class CanvasStore{
         this.undoRedoAdapter.redo()
     }
 
+    transformItem(item: ItemType, newPoint : {x: number, y: number}, scale: number, angle: number, undoRedoSkip = false){
+        const index = this.itemsArray.findIndex(i => i.itemType_id === item.itemType_id)
+        if(index == undefined){
+            return;
+        }
+        if(!undoRedoSkip){
+            this.undoRedoAdapter.addAction(new TransformItem(item, {x: newPoint.x, y: newPoint.y}, scale, angle));
+        }
+        this.itemsArray[index].polygon.point.x = newPoint.x;
+        this.itemsArray[index].polygon.point.y = newPoint.y;
+        this.itemsArray[index].angle = angle;
+        this.itemsArray[index].scale = scale;
+    }
     addItem(coordinates: PointType){
         if(this.chosenImage == null){
             return;
         }
-        console.log("chosen image",this.chosenImage);
         const item : ItemType ={
+            angle: 0,
+            scale: 1,
             itemName: "",
             valuablePlacement: "",
             pictureLink: icons[this.chosenImage],
