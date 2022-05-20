@@ -91,10 +91,11 @@ paths:
         - apiKey: []
     parameters:
       - schema:
-          type: string
+          type: integer
         name: employee_id
         in: path
         required: true
+        description: id of employee
     post:
       summary: POST endpoint
       operationId: post-employee-employee_id
@@ -284,6 +285,7 @@ paths:
         name: floor_id
         in: path
         required: true
+        description: id of the floor
   '/floor/{floor_id}/walls':
     parameters:
       - schema:
@@ -291,6 +293,7 @@ paths:
         name: floor_id
         in: path
         required: true
+        description: id of the floor
     get:
       summary: GET endpoint
       responses:
@@ -322,6 +325,7 @@ paths:
         name: floor_id
         in: path
         required: true
+        description: id of the floor
     delete:
       summary: DELETE endpoint.
       operationId: delete-floor-building_id-delete
@@ -405,6 +409,21 @@ paths:
       security:
         - apiKey: []
   /items:
+    get:
+      summary: GET endpoint.
+      operationId: get-items
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+      description: Get list of all Items
+      security:
+        - apiKey: [ ]
     post:
       summary: POST endpoint.
       operationId: post-items-save
@@ -460,6 +479,7 @@ paths:
         name: zone_id
         in: path
         required: true
+        description: id of the zone
   '/wall/{wall_id}':
     put:
       summary: PUT endpoint
@@ -490,6 +510,7 @@ paths:
         name: wall_id
         in: path
         required: true
+        description: id of the wall
     delete:
       summary: DELETE endpoint
       operationId: delete-wall-wall_id
@@ -690,7 +711,7 @@ paths:
         - employee
     parameters:
       - schema:
-          type: integer
+          type: number
         name: employee_id
         in: path
         required: true
@@ -734,11 +755,11 @@ components:
                 type: object
                 required:
                   - x
-                  - y
+                  - 'y'
                 properties:
                   x:
                     type: integer
-                  y:
+                  'y':
                     type: integer
             required:
               - point
@@ -877,14 +898,14 @@ components:
             properties:
               point:
                 type: object
-                required:
-                  - x
-                  - y
                 properties:
                   x:
                     type: integer
                   y:
                     type: integer
+                required:
+                  - x
+                  - y
             required:
               - point
         wallType:
@@ -906,18 +927,10 @@ components:
           items:
             type: object
             properties:
-              point:
-                type: object
-                required:
-                  - x
-                  - y
-                properties:
-                  x:
-                    type: integer
-                  y:
-                    type: integer
-            required:
-              - point
+              x:
+                type: number
+              'y':
+                type: number
         wallType:
           type: string
       required:
@@ -946,13 +959,16 @@ components:
           type: object
           required:
             - x
-            - y
+            - 'y'
           properties:
             x:
               type: integer
-            y:
+            'y':
               type: integer
         angle:
+          type: number
+          format: float
+        scale:
           type: number
           format: float
         itemType:
@@ -962,6 +978,7 @@ components:
         - floor_id
         - point
         - angle
+        - scale
         - itemType
     Item-entity:
       title: Item-entity
@@ -986,13 +1003,16 @@ components:
           type: object
           required:
             - x
-            - y
+            - 'y'
           properties:
             x:
               type: integer
-            y:
+            'y':
               type: integer
         angle:
+          type: number
+          format: float
+        scale:
           type: number
           format: float
       required:
@@ -1000,6 +1020,7 @@ components:
         - itemType_id
         - point
         - angle
+        - scale
     WorkspaceItem:
       title: WorkspaceItem
       type: object
@@ -1023,13 +1044,16 @@ components:
           type: object
           required:
             - x
-            - y
+            - 'y'
           properties:
             x:
               type: integer
-            y:
+            'y':
               type: integer
         angle:
+          type: number
+          format: float
+        scale:
           type: number
           format: float
         itemType:
@@ -1043,6 +1067,7 @@ components:
         - floor_id
         - point
         - angle
+        - scale
         - itemType
     ItemType:
       title: ItemType
@@ -1066,11 +1091,11 @@ components:
               type: object
               required:
                 - x
-                - y
+                - 'y'
               properties:
                 x:
                   type: integer
-                y:
+                'y':
                   type: integer
         pictureLink:
           format: uri-reference

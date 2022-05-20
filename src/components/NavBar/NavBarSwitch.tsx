@@ -44,7 +44,7 @@ interface SwitchProps {
 
 const NavBarSwitch: React.FC<SwitchProps> = ({active, setActive}) => {
     return (
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack style={{marginLeft:"50px"}} direction="row" spacing={1} alignItems="center">
             <Typography>View</Typography>
             <Android12Switch defaultChecked onClick={() => setActive(!active)} />
             <Typography>Edit</Typography>
