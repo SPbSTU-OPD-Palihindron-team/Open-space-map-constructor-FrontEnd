@@ -5,6 +5,8 @@ import NavBar from "./components/NavBar/NavBar";
 import CanvasContextMenu from "./components/Canvas/context_menu/CanvasContextMenu";
 import CanvasStore from "./stores/CanvasStore";
 import {observer} from "mobx-react-lite";
+import AuthModalWindow from "./components/AuthModalWindow/AuthModalWindow";
+import AuthModalWindowStore from "../src/stores/AuthModalWindowStore";
 
 
 
@@ -30,6 +32,7 @@ const App: React.FC = observer(() => {
             <Canvas/>
             <CanvasContextMenu/>
             <RightSlideMenu/>
+            { AuthModalWindowStore.active && (<AuthModalWindow />)}
         </div>
     );
 });
