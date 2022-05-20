@@ -12,6 +12,9 @@ import Divider from '@mui/material/Divider';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import {Login} from "@mui/icons-material";
+import {useNavigate} from "react-router-dom";
+import AuthModalWindowStore from '../../stores/AuthModalWindowStore'
 
 
 const NavBarInformation = () => {
@@ -27,13 +30,23 @@ const NavBarInformation = () => {
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
         setAnchorEl(null);
     };
 
+    const navigate = useNavigate();
+
+    const handleSignIn = ()=>{
+        AuthModalWindowStore.handleActive();
+        navigate('/auth')
+        handleClose();
+    }
+
+
     return (
         <Stack direction="row" spacing={1} alignItems="center" className='profile'>
-            <Typography className='profession'> Designer </Typography>
+            <Typography className='profession'> Manager </Typography>
             {auth && (
                 <div>
                     <IconButton
@@ -85,27 +98,24 @@ const NavBarInformation = () => {
                             <Avatar /> My account
                         </MenuItem>
                         <Divider />
-                        <MenuItem>
-                            <ListItemIcon>
-                                <PersonAdd fontSize="small" />
-                            </ListItemIcon>
-                            Add another account
-                        </MenuItem>
+
                         <MenuItem>
                             <ListItemIcon>
                                 <Settings fontSize="small" />
                             </ListItemIcon>
                             Settings
                         </MenuItem>
-                        <MenuItem>
+
+                        <MenuItem onClick={handleSignIn}>
                             <ListItemIcon>
-                                <Logout fontSize="small" />
+                                <Login fontSize="small" />
                             </ListItemIcon>
-                            Logout
+                            Sign In
                         </MenuItem>
+
                     </Menu>
                 </div>
-            )} <Typography className='name'> Nikishin Andrey </Typography>
+            )} <Typography className='name'> Name </Typography>
         </Stack>
     );
 };

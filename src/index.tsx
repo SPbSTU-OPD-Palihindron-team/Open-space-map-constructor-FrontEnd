@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from "./App";
+import {BrowserRouter} from "react-router-dom";
 
 const rootElement = document.getElementById('root');
 // rootElement can be null, so typescript requires check
@@ -10,7 +11,9 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
       <React.StrictMode>
-          <App />
+          <BrowserRouter>
+              <App />
+          </BrowserRouter>
       </React.StrictMode>
     );
 

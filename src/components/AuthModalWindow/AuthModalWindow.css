@@ -1,0 +1,27 @@
+.auth-modal{
+    height: 100vh;
+    width: 100vw;
+    margin: auto;
+    background-color: rgba(0,0,0,0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+
+
+
+.auth-modal-body{
+    width: 500px;
+    color: white;
+    vertical-align: center;
+    background-color: #282c34;
+    padding: 20px;
+    border-radius: 15px;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+}
