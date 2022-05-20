@@ -13,7 +13,6 @@ const RightSlideMenu: React.FC = () => {
     const [menuActive, setMenuActive] = useState<boolean>(false);
     const handleMenuActive = () => {
         setMenuActive(!menuActive);
-        console.log(menuActive);
     }
     return (
         <div className={menuActive ? 'menu active' : 'menu'} onClick={handleMenuActive}>

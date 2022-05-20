@@ -10,14 +10,14 @@ import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import EmailIcon from '@mui/icons-material/Email';
 
 const InformationOfEmployees: React.FC = ()  => {
-    const str:string = Employees.inform.title;
+    const str:string = Employees.inform.name;
     const capital = (str:string) => str.split('').filter(a => a.match(/[A-Z]/)).join('');
     return (
         <div>
             <Stack direction="row" spacing={1} style={{marginTop: "30px"}}>
-                <Avatar className='avatar' sx={{bgcolor: lightBlue[800], width: 100, height: 100 }}> {capital(Employees.inform.title)} </Avatar>
+                <Avatar className='avatar' sx={{bgcolor: lightBlue[800], width: 100, height: 100 }}> {capital(Employees.inform.surname + Employees.inform.name)} </Avatar>
                 <div className='nameEmployee'>
-                    <p>{Employees.inform.title}</p>
+                    <p>{Employees.inform.name + '  ' + Employees.inform.surname}</p>
                 </div>
             </Stack>
             <div className='informationText'>
@@ -34,11 +34,12 @@ const InformationOfEmployees: React.FC = ()  => {
                 <Stack direction="row" spacing={2}>
                     <ContactPhoneIcon className='Icon'/>
                     <p>Number:</p>
-                    <p className='PersonalInformation'>{Employees.inform.number}</p>
+                    <p className='PersonalInformation'>{Employees.inform.telephone}</p>
                 </Stack>
                 <Stack direction="row" spacing={2}>
                     <EmailIcon className='icon'/>
                     <p>Email:</p>
+                    <p className='PersonalInformation'>{Employees.inform.email}</p>
                 </Stack>
             </div>
         </div>
