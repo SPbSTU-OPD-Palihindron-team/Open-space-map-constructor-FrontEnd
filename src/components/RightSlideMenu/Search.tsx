@@ -17,7 +17,7 @@ const Search: React.FC =  observer(() => {
                     className='Search'
                     id="combo-box-demo"
                     options={Employees.listOfEmployee}
-                    getOptionLabel={(option) => option.title + " " + option.room + " " + option.building }
+                    getOptionLabel={(option) => option.name + " " + option.surname + " " + option.room + " " + option.building }
                     style={{ width: 280, background:"white" }}
                     onChange={handleOnChange}
 
@@ -35,7 +35,7 @@ const Search: React.FC =  observer(() => {
 
                 />
 
-                {(Employees.inform===null || Employees.inform.title==="") ? <div> </div> : <InformationOfEmployees/>}
+                {(Employees.inform===null || Employees.inform.name==="") ? <div> </div> : <InformationOfEmployees/>}
             </ul>
         </div>
     );
